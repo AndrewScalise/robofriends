@@ -14,27 +14,26 @@ class App extends Component {
     };
   }
 
+  fetchStarWarsPeopleByNumberOfPages = () => {
+    let userNames = [];
+    for (let index = 1; index < 10; index++) {
+      let url = `https://swapi.co/api/people/?page=${index}`;
+      fetch(url)
+        .then(response => {
+          return response.json();
+        })
+        // eslint-disable-next-line no-loop-func
+        .then(users => {
+          const currentUsernames = users.results.map(result => result.name);
+          userNames = userNames.concat(currentUsernames);
+          console.log(userNames);
+          this.setState({ robots: userNames });
+        });
+    }
+  };
+
   componentDidMount() {
-    let firstUsernames;
-    let secondUsernames;
-    fetch("https://swapi.co/api/people/")
-      .then(response => {
-        return response.json();
-      })
-      .then(users => {
-        firstUsernames = users.results.map(result => result.name);
-        console.log(firstUsernames);
-        this.setState({ robots: firstUsernames });
-      });
-    fetch("https://swapi.co/api/people/?page=2")
-      .then(response => {
-        return response.json();
-      })
-      .then(users => {
-        secondUsernames = users.results.map(result => result.name);
-        console.log(secondUsernames);
-        this.setState({ robots: firstUsernames.concat(secondUsernames) });
-      });
+    this.fetchStarWarsPeopleByNumberOfPages();
   }
   onSearchChange = event => {
     this.setState({ searchfield: event.target.value });
