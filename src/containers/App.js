@@ -15,12 +15,25 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    let firstUsernames;
+    let secondUsernames;
+    fetch("https://swapi.co/api/people/")
       .then(response => {
         return response.json();
       })
       .then(users => {
-        this.setState({ robots: users });
+        firstUsernames = users.results.map(result => result.name);
+        console.log(firstUsernames);
+        this.setState({ robots: firstUsernames });
+      });
+    fetch("https://swapi.co/api/people/?page=2")
+      .then(response => {
+        return response.json();
+      })
+      .then(users => {
+        secondUsernames = users.results.map(result => result.name);
+        console.log(secondUsernames);
+        this.setState({ robots: firstUsernames.concat(secondUsernames) });
       });
   }
   onSearchChange = event => {
@@ -30,7 +43,7 @@ class App extends Component {
   render() {
     const { robots, searchfield } = this.state;
     const filteredRobots = robots.filter(robot => {
-      return robot.name.toLowerCase().includes(searchfield.toLowerCase());
+      return robot.toLowerCase().includes(searchfield.toLowerCase());
     });
     return !robots.length ? (
       <h1>Loading</h1>
