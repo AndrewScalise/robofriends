@@ -19,6 +19,9 @@ class App extends Component {
       .then((response) => response.json())
       .then((users) => {
         this.setState({ robots: users });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
